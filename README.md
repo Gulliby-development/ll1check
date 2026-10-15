@@ -66,7 +66,12 @@ accepted, 9 productions
 
 ## Grammar file
 
-The file is UTF-8. One leading BOM is skipped. Lines are split at LF and one CR before the LF is removed. Line numbers count every physical line from 1. A line is trimmed of spaces and tabs; an empty line or one starting with `#` is skipped (a comment cannot follow other text). Tokens are separated by runs of spaces and tabs.
+The file is UTF-8. One leading BOM is skipped. Lines are split at LF and one CR before the LF is removed. Line numbers count every physical line from 1. A line is trimmed of spaces and tabs; an empty line or one starting with `#` is skipped. Tokens are separated by runs of spaces and tabs. On a rule line or a `|` line the first token that starts with `#`, and everything after it, is a comment (`'#'` in quotes is an ordinary terminal; `a#b` is an invalid symbol, not a comment):
+
+```
+Expr2 -> '+' Term Expr2     # more terms
+       | %empty             # or none
+```
 
 - A rule line is `NAME -> ALT | ALT ...`.
 - A line whose first token is `|` adds alternatives to the latest rule.
