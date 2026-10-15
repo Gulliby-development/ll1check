@@ -6,7 +6,13 @@ import (
 )
 
 func splitTokens(line string) []string {
-	return strings.FieldsFunc(line, func(r rune) bool { return r == ' ' || r == '\t' })
+	tokens := strings.FieldsFunc(line, func(r rune) bool { return r == ' ' || r == '\t' })
+	for i, token := range tokens {
+		if strings.HasPrefix(token, "#") {
+			return tokens[:i]
+		}
+	}
+	return tokens
 }
 
 // Parse reads a grammar file. The error text has no "ll1check: " prefix.
