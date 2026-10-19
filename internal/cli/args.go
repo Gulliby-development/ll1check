@@ -7,9 +7,10 @@ const usage = "usage: ll1check check GRAMMAR\n" +
 	"       ll1check parse GRAMMAR TOKENS\n"
 
 type command struct {
-	name  string
-	help  bool
-	files []string
+	name    string
+	help    bool
+	version bool
+	files   []string
 }
 
 // parseArgs validates args and returns the command, or an error message.
@@ -20,6 +21,10 @@ func parseArgs(args []string) (command, string) {
 	}
 	if len(args) == 1 && args[0] == "--help" {
 		c.help = true
+		return c, ""
+	}
+	if len(args) == 1 && args[0] == "--version" {
+		c.version = true
 		return c, ""
 	}
 	need := 1

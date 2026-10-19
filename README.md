@@ -12,6 +12,8 @@ ll1check is a command-line checker for LL(1) grammars. It is for people who writ
 go build -o ll1check .
 ```
 
+ll1check needs Go 1.24 or newer (the `go` line of `go.mod`).
+
 ## Usage
 
 ```
@@ -25,6 +27,8 @@ GRAMMAR and TOKENS are paths or `-` for standard input (named `<stdin>`). In mes
 - `check` prints one line per finding and exits 1, or an `ok` line with the number of rules and exits 0.
 - `sets` prints a table with the nullable flag, FIRST and FOLLOW of every rule.
 - `parse` runs a predictive parser over the tokens and prints the productions it applies.
+
+`ll1check --version` (as the only argument) prints `ll1check` and the module version from the build information (a tag or a pseudo-version, or `devel` when the build has none) on one line, and exits 0.
 
 A grammar file `expr.g`:
 

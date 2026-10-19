@@ -3,6 +3,7 @@ package cli
 import (
 	"io"
 	"os"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"unicode/utf8"
@@ -49,6 +50,14 @@ func Run(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 	}
 	if c.help {
 		_, _ = io.WriteString(stdout, usage)
+		return 0
+	}
+	if c.version {
+		version := "devel"
+		if info, ok := debug.ReadBuildInfo(); ok && info.Main.Version != "" && info.Main.Version != "(devel)" {
+			version = info.Main.Version
+		}
+		_, _ = io.WriteString(stdout, "ll1check "+version+"\n")
 		return 0
 	}
 	display := displayName(c.files[0])
