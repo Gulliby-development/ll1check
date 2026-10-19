@@ -75,6 +75,14 @@ func TestHelp(t *testing.T) {
 	expect(t, []string{"--help", "x"}, "", 2, "", "ll1check: unknown command \"--help\"\n")
 }
 
+func TestVersion(t *testing.T) {
+	expect(t, []string{"--version"}, "", 0, "ll1check devel\n", "")
+	expect(t, []string{"--version", "check"}, "", 2, "", "ll1check: unknown command \"--version\"\n")
+	expect(t, []string{"check", "--version"}, "", 2, "", "ll1check: unknown option \"--version\"\n")
+	expect(t, []string{"--version", "--help"}, "", 2, "", "ll1check: unknown command \"--version\"\n")
+	expect(t, []string{"--version=1"}, "", 2, "", "ll1check: unknown command \"--version=1\"\n")
+}
+
 func TestCheckOK(t *testing.T) {
 	g := writeTemp(t, "expr.g", exprGrammar)
 	expect(t, []string{"check", g}, "", 0, shown(g)+": ok, 5 rules\n", "")

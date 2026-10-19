@@ -74,3 +74,28 @@ func TestReadmeContents(t *testing.T) {
 		})
 	}
 }
+
+func TestGoDirectiveMatchesReadme(t *testing.T) {
+	goModRaw, err := os.ReadFile("../../go.mod")
+	if err != nil {
+		t.Fatalf("cannot read go.mod: %v", err)
+	}
+	readmeRaw, err := os.ReadFile("../../README.md")
+	if err != nil {
+		t.Fatalf("cannot read README.md: %v", err)
+	}
+
+	goDirective := ""
+	for _, line := range strings.Split(string(goModRaw), "\n") {
+		if strings.HasPrefix(line, "go ") {
+			goDirective = strings.TrimSpace(strings.TrimPrefix(line, "go "))
+		}
+	}
+	if goDirective != "1.24" {
+		t.Errorf("go.mod go directive = %q, want 1.24", goDirective)
+	}
+
+	if !strings.Contains(string(readmeRaw), "Go 1.24 or newer") {
+		t.Error("README.md does not contain Go 1.24 or newer")
+	}
+}
