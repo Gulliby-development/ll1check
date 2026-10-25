@@ -69,7 +69,7 @@ func expect(t *testing.T, args []string, stdin string, code int, out, errText st
 }
 
 func TestHelp(t *testing.T) {
-	u := "usage: ll1check check GRAMMAR\n       ll1check sets GRAMMAR\n       ll1check parse GRAMMAR TOKENS\n"
+	u := "usage: ll1check check GRAMMAR\n       ll1check sets GRAMMAR\n       ll1check parse [--quiet] GRAMMAR TOKENS\n"
 	expect(t, []string{"--help"}, "", 0, u, "")
 	expect(t, []string{"check", "--help"}, "", 2, "", "ll1check: unknown option \"--help\"\n")
 	expect(t, []string{"--help", "x"}, "", 2, "", "ll1check: unknown command \"--help\"\n")
