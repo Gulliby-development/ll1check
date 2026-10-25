@@ -19,7 +19,7 @@ ll1check needs Go 1.24 or newer (the `go` line of `go.mod`).
 ```
 usage: ll1check check GRAMMAR
        ll1check sets GRAMMAR
-       ll1check parse GRAMMAR TOKENS
+       ll1check parse [--quiet] GRAMMAR TOKENS
 ```
 
 GRAMMAR and TOKENS are paths or `-` for standard input (named `<stdin>`). In messages a backslash in a path is shown as `/`. `--help` is accepted only as the only argument.
@@ -115,6 +115,12 @@ With no findings it prints `FILE: ok, N rules` (`1 rule`) and exits 0.
 The parser has the end marker and the start rule on its stack. A nonterminal on top is replaced by the alternative whose prediction set holds the next token (`$` when the tokens are used up), and one line `X -> SYMBOLS` is printed (`%empty` for none). A terminal on top must equal the next token and consumes it. When the tokens are used up exactly, it prints `accepted, N productions` (`1 production`) and exits 0.
 
 TOKENS holds tokens separated by runs of ASCII space, tab, CR and LF (one leading BOM skipped); it may hold none. A syntax error exits 1 and keeps the lines already printed on stdout. Stderr gets `ll1check: TOKENS: token N: unexpected "X" (expected A, B)` or `ll1check: TOKENS: unexpected end of input (expected A, B)`. N counts tokens from 1. The expected list is the union of the prediction sets of the rule on top (a terminal on top: that terminal), sorted, with `end of input` in place of `$`, last.
+
+With `parse --quiet` the productions are not printed: an accepted input prints only the `accepted, N productions` line, and a syntax error prints nothing on stdout (stderr and the exit code stay as they are). `--quiet` is an option of `parse` only and may stand anywhere among its arguments; `check --quiet` and `sets --quiet` are `unknown option "--quiet"` (exit 2). With the files above, `ll1check parse --quiet expr.g sum.txt` prints (exit 0):
+
+```
+accepted, 9 productions
+```
 
 `parse` refuses a grammar that is not LL(1): when `check` would print an LL003 or LL004 finding, it exits 2 before TOKENS is read.
 

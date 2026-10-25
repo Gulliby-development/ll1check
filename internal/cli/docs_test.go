@@ -8,7 +8,7 @@ import (
 
 const docUsage = `usage: ll1check check GRAMMAR
        ll1check sets GRAMMAR
-       ll1check parse GRAMMAR TOKENS
+       ll1check parse [--quiet] GRAMMAR TOKENS
 `
 
 const docExprG = `# arithmetic expressions

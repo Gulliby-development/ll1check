@@ -4,12 +4,13 @@ import "github.com/Gulliby-development/ll1check/internal/grammar"
 
 const usage = "usage: ll1check check GRAMMAR\n" +
 	"       ll1check sets GRAMMAR\n" +
-	"       ll1check parse GRAMMAR TOKENS\n"
+	"       ll1check parse [--quiet] GRAMMAR TOKENS\n"
 
 type command struct {
 	name    string
 	help    bool
 	version bool
+	quiet   bool
 	files   []string
 }
 
@@ -36,11 +37,16 @@ func parseArgs(args []string) (command, string) {
 		return c, "unknown command " + grammar.Show(args[0])
 	}
 	c.name = args[0]
-	rest := args[1:]
-	for _, a := range rest {
+	var rest []string
+	for _, a := range args[1:] {
+		if a == "--quiet" && c.name == "parse" {
+			c.quiet = true
+			continue
+		}
 		if len(a) > 0 && a[0] == '-' && a != "-" {
 			return c, "unknown option " + grammar.Show(a)
 		}
+		rest = append(rest, a)
 	}
 	if len(rest) < need {
 		return c, "missing argument"

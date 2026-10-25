@@ -98,9 +98,11 @@ func Run(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 	}
 	lines, serr := grammar.ParseTokens(g, a, grammar.Tokenize(tokText))
 	var b strings.Builder
-	for _, l := range lines {
-		b.WriteString(l)
-		b.WriteString("\n")
+	if !c.quiet {
+		for _, l := range lines {
+			b.WriteString(l)
+			b.WriteString("\n")
+		}
 	}
 	if serr == nil {
 		b.WriteString(acceptedLine(len(lines)))
