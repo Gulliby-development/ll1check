@@ -17,7 +17,7 @@ ll1check needs Go 1.24 or newer (the `go` line of `go.mod`).
 ## Usage
 
 ```
-usage: ll1check check GRAMMAR
+usage: ll1check check [--only CODE] GRAMMAR
        ll1check sets GRAMMAR
        ll1check parse [--quiet] GRAMMAR TOKENS
 ```
@@ -109,6 +109,8 @@ Definitions:
 - `LL004`: for every pair of alternatives I < J (numbered from 1 within the rule, continuation lines included) whose prediction sets share terminals, the shared terminals are listed.
 
 With no findings it prints `FILE: ok, N rules` (`1 rule`) and exits 0.
+
+With `check --only CODE` (CODE is one of `LL001` to `LL004`, case as written; `--only=CODE` works too) only the findings with that code are printed, in the same order and with exit 1. When the grammar has no finding with that code, `check` prints `FILE: no CODE findings, N rules` (`1 rule`) and exits 0, even if findings with other codes exist. `--only` belongs to `check`; give it once, before or after GRAMMAR.
 
 ### How parse works
 

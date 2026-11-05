@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-const docUsage = `usage: ll1check check GRAMMAR
+const docUsage = `usage: ll1check check [--only CODE] GRAMMAR
        ll1check sets GRAMMAR
        ll1check parse [--quiet] GRAMMAR TOKENS
 `
