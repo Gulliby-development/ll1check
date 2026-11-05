@@ -62,6 +62,10 @@ func okLine(display string, rules int) string {
 	return display + ": ok, " + plural(rules, "rule") + "\n"
 }
 
+func noneLine(display, code string, rules int) string {
+	return display + ": no " + code + " findings, " + plural(rules, "rule") + "\n"
+}
+
 func acceptedLine(productions int) string {
 	return "accepted, " + plural(productions, "production") + "\n"
 }

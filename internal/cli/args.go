@@ -1,8 +1,12 @@
 package cli
 
-import "github.com/Gulliby-development/ll1check/internal/grammar"
+import (
+	"strings"
 
-const usage = "usage: ll1check check GRAMMAR\n" +
+	"github.com/Gulliby-development/ll1check/internal/grammar"
+)
+
+const usage = "usage: ll1check check [--only CODE] GRAMMAR\n" +
 	"       ll1check sets GRAMMAR\n" +
 	"       ll1check parse [--quiet] GRAMMAR TOKENS\n"
 
@@ -11,6 +15,7 @@ type command struct {
 	help    bool
 	version bool
 	quiet   bool
+	only    string
 	files   []string
 }
 
@@ -38,7 +43,30 @@ func parseArgs(args []string) (command, string) {
 	}
 	c.name = args[0]
 	var rest []string
-	for _, a := range args[1:] {
+	onlySeen := false
+	for i := 1; i < len(args); i++ {
+		a := args[i]
+		if c.name == "check" && (a == "--only" || strings.HasPrefix(a, "--only=")) {
+			if onlySeen {
+				return c, "--only given twice"
+			}
+			onlySeen = true
+			var v string
+			if a == "--only" {
+				if i+1 >= len(args) {
+					return c, "--only needs a value"
+				}
+				i++
+				v = args[i]
+			} else {
+				v = a[len("--only="):]
+			}
+			if !validCode(v) {
+				return c, "unknown finding code " + grammar.Show(v)
+			}
+			c.only = v
+			continue
+		}
 		if a == "--quiet" && c.name == "parse" {
 			c.quiet = true
 			continue
@@ -59,4 +87,9 @@ func parseArgs(args []string) (command, string) {
 	}
 	c.files = rest
 	return c, ""
+}
+
+// validCode reports whether s is one of the four finding codes.
+func validCode(s string) bool {
+	return s == "LL001" || s == "LL002" || s == "LL003" || s == "LL004"
 }

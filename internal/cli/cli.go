@@ -76,9 +76,22 @@ func Run(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 		return 0
 	case "check":
 		findings := grammar.Findings(g, a)
-		if len(findings) == 0 {
+		if len(findings) == 0 && c.only == "" {
 			_, _ = io.WriteString(stdout, okLine(display, len(g.Rules)))
 			return 0
+		}
+		if c.only != "" {
+			var kept []grammar.Finding
+			for _, f := range findings {
+				if f.Code == c.only {
+					kept = append(kept, f)
+				}
+			}
+			findings = kept
+			if len(findings) == 0 {
+				_, _ = io.WriteString(stdout, noneLine(display, c.only, len(g.Rules)))
+				return 0
+			}
 		}
 		var b strings.Builder
 		for _, f := range findings {
